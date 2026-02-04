@@ -7,6 +7,8 @@ from typing import Dict, Any, List
 # Initialize App
 app = FastAPI(title="Lead Scoring API", version="1.0")
 
+import numpy as np
+
 # Load Model
 try:
     model_pipeline = joblib.load('models/pipeline.pkl')
@@ -35,20 +37,22 @@ def predict(payload: LeadData):
         # But 'Select' -> NaN mapping was done BEFORE pipeline in train.py
         # We must replicate that here.
         
-        # 1. Replace 'Select' with None/NaN (Pandas handles None as NaN)
-        df = df.replace('Select', pd.NA)
+        # 1. Replace 'Select' with NaN
+        df = df.replace('Select', np.nan)
         
-        # Note: We do NOT need to drop columns here necessarily, 
-        # as the pipeline should handle missing/extra columns if configured correctly.
-        # However, to be safe and match training distribution, we let the pipeline ignore unknown columns
-        # (OneHotEncoder handle_unknown='ignore').
-        # ColumnTransformer by default drops columns not specified in transformers?
-        # Let's check: We passed 'numeric_features' and 'categorical_features' lists to ColumnTransformer.
-        # Those lists were fixed at training time.
-        # We need to ensure the input DF has those columns.
+        # ADDED: Align columns with model expectations
+        if hasattr(model_pipeline, 'feature_names_in_'):
+            expected_cols = model_pipeline.feature_names_in_
+            # Add missing cols with NaN
+            for col in expected_cols:
+                if col not in df.columns:
+                    df[col] = np.nan
+            # Reorder/Drop extra
+            df = df[expected_cols]
         
         # Make predictions
         probabilities = model_pipeline.predict_proba(df)[:, 1]
+
         
         # Result
         results = [
@@ -63,4 +67,5 @@ def predict(payload: LeadData):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8001)
+
