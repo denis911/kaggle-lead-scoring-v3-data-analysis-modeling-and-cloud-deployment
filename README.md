@@ -71,13 +71,27 @@ docker build -t lead-scorer .
 docker run -p 8001:8001 lead-scorer
 ```
 
-## Modeling Details
--   **Model:** XGBoost Classifier
--   **Metric:** AUC ~0.88
--   **Leakage Prevention:** Removed `Customer` column and post-conversion signals (`Payment Status`, etc.).
--   **Features:** Uses demographics, source attribution, and web behavior (`TotalVisits`, `Time Per Visit`).
+## Evaluation & Insights
+
+### Model Performance
+After rigorous leakage prevention (removing `Customer` status and post-conversion indicators), we achieved the following results on the test set:
+
+| Model | AUC Score |
+| :--- | :--- |
+| **XGBoost** | **0.8803** |
+| Random Forest | 0.8513 |
+| Logistic Regression | 0.8447 |
+
+### Top 5 Predictive Features
+Based on Random Forest feature importance, the primary drivers for conversion are:
+1.  **Lead Age (36.8%)**: Older leads in the CRM (returning users) have significantly higher conversion probability.
+2.  **Purchase Page Hits (23.7%)**: Visiting the `/purchase/` path is the strongest direct signal of intent.
+3.  **Call Back Counter (7.3%)**: Number of follow-ups correlates strongly with eventual conversion.
+4.  **Homepage Activity (5.9%)**: General engagement on the root `/` landing page.
+5.  **Book Free Session (4.3%)**: Interaction with the lead-magnet session booking.
 
 ### Data Cleaning Decisions
 **Why we kept `NaN` values:**
 Early analysis suggested removing "Non-Diabetic" leads. However, the data revealed that the `Diabetes or Prediabetes` column has 95% missing values (`NaN`). Crucially, **2,310 Customers** (paying users) have `NaN` in this column, compared to only 208 with explicit "Diabetes" status. Filtering out `NaN` values would have removed 90% of the positive class. Thus, we treat `NaN` as a valid category. "Non-Diabetic" does not exist as an explicit label in the dataset.
+
 
