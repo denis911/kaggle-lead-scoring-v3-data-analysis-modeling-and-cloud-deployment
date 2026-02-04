@@ -46,6 +46,9 @@ uv run python predict.py
 ```
 *Note: The service listens on port 8001.*
 
+Swagger UI (interactive docs):
+http://localhost:8001/docs
+
 ### 4. Test Prediction
 Send a sample request:
 ```bash
