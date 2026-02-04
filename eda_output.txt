@@ -1,0 +1,16 @@
+Random Forest AUC: 1.0000
+
+Top 10 Feature Importances:
+1. Customer (0.7160)
+2. Landing Page_/purchase/[productCode] (0.1203)
+3. Landing Page_/ (0.0296)
+4. Lead Age (0.0268)
+5. Landing Page_/book-free-session (0.0218)
+6. Call Back Counter (0.0114)
+7. Last Activity_Inbound Phone Call Activity (0.0088)
+8. Landing Page_missing (0.0084)
+9. Landing Page_/webinar (0.0067)
+10. Source Medium_missing (0.0063)
+XGBoost AUC: 1.0000
+
+Best Model: Logistic Regression
