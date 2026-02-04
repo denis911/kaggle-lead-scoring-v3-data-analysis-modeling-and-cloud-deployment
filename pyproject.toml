@@ -1,0 +1,7 @@
+[project]
+name = "kaggle-lead-scoring-v3-data-analysis-modeling-and-cloud-deployment"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
