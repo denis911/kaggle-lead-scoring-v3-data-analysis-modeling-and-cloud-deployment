@@ -76,3 +76,8 @@ docker run -p 8001:8001 lead-scorer
 -   **Metric:** AUC ~0.88
 -   **Leakage Prevention:** Removed `Customer` column and post-conversion signals (`Payment Status`, etc.).
 -   **Features:** Uses demographics, source attribution, and web behavior (`TotalVisits`, `Time Per Visit`).
+
+### Data Cleaning Decisions
+**Why we kept `NaN` values:**
+Early analysis suggested removing "Non-Diabetic" leads. However, the data revealed that the `Diabetes or Prediabetes` column has 95% missing values (`NaN`). Crucially, **2,310 Customers** (paying users) have `NaN` in this column, compared to only 208 with explicit "Diabetes" status. Filtering out `NaN` values would have removed 90% of the positive class. Thus, we treat `NaN` as a valid category. "Non-Diabetic" does not exist as an explicit label in the dataset.
+
