@@ -2,6 +2,8 @@
 
 A production-ready machine learning pipeline to score sales leads, built with XGBoost, FastAPI, and Docker.
 
+Data source - lead (diabetic patients) scoring CRM dump for xyz healthcare company (https://www.kaggle.com/datasets/bandilswati/lead-scoring-for-xyz-company)
+
 ## Project Overview
 
 This system predicts the probability of a lead converting into a customer using historical CRM data. It includes:
